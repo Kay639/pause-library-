@@ -12,7 +12,8 @@ Three screens, using sample content:
 2. **Practice list** – five practices for the chosen feeling (title, type, length).
    The first one is tagged **Free sample**.
 3. **Player** – a calm "breathing" circle, progress bar, play/pause, and skip ±15 seconds.
-   For now it's a *placeholder*: it runs a silent timer for the practice's length.
+   Practices with a recording play the real audio (so far: **The Long Exhale**, `the-long-exhale.mp3`).
+   The rest use a *placeholder*: a silent timer for the practice's length.
 
 No logins or payments yet.
 
@@ -35,5 +36,6 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - **Rename a practice or change its length:** open `data.js`, find it, edit the text between the quotes or the number after `minutes:`.
 - **Change a feeling's colour:** in `data.js`, change `color` (the soft background) and `accent` (the deeper shade).
   Colours are written as codes like `#DDE8F1`. Any "hex colour picker" website will give you these.
-- **Add a real recording:** put the audio file's web link between the quotes after `audio:`, e.g.
-  `audio: "https://example.com/set-it-down.mp3"`. The player will then play the real file and the "placeholder" note disappears.
+- **Add a real recording:** upload the mp3 to this folder, then in `data.js` put its file name between the quotes after `audio:`, e.g.
+  `audio: "put-it-down.mp3"` (a full web link works too). The player then plays the real file, shows its real length,
+  and the "placeholder" note disappears.

@@ -29,7 +29,7 @@ const FEELINGS = [
     color: "#DDE8F1",
     accent: "#4F7396",
     practices: [
-      { title: "The Long Exhale",     type: "Breathwork",        minutes: 3, about: "Lengthen each out-breath to tell your body it's safe.", audio: "" },
+      { title: "The Long Exhale",     type: "Breathwork",        minutes: 4, about: "Lengthen each out-breath to tell your body it's safe.", audio: "the-long-exhale.mp3" },
       { title: "Put It Down",         type: "Visualization",     minutes: 4, about: "Picture setting down what you're carrying, just for now.", audio: "" },
       { title: "One Next Thing",      type: "Journal prompt",    minutes: 3, about: "Write down the one small next step, and let the rest wait.", audio: "" },
       { title: "Feet on the Floor",   type: "Grounding",         minutes: 2, about: "Feel the ground holding you steady.", audio: "" },
