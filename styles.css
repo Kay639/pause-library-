@@ -1,0 +1,256 @@
+/* =========================================================
+   THE PAUSE LIBRARY — LOOK & FEEL
+   Colours, fonts and spacing for every screen.
+   ========================================================= */
+
+:root {
+  --bg: #FAF7F2;           /* warm off-white page background */
+  --ink: #2F2B28;          /* main text colour */
+  --ink-soft: #6F6862;     /* secondary text */
+  --card: #FFFFFF;
+  --line: rgba(47, 43, 40, 0.08);
+
+  /* These two change per feeling (set by app.js) */
+  --tint: #EFEAE2;
+  --accent: #6F6862;
+
+  --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius: 20px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 480px;              /* phone-width column, centred on bigger screens */
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 28px 20px 48px;
+  padding-top: max(28px, env(safe-area-inset-top));
+}
+
+h1, h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button { font: inherit; color: inherit; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Gentle fade when a screen appears */
+.screen { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Back link ---------- */
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+}
+
+/* ---------- HOME ---------- */
+.home-header { text-align: center; margin: 24px 0 32px; }
+.brand {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.home-header h1 { font-size: 38px; }
+.home-header p { color: var(--ink-soft); margin: 10px 0 0; }
+
+.feelings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feeling {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 120px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--tint);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feeling:hover, .feeling:focus-visible { transform: translateY(-2px); box-shadow: 0 6px 20px var(--line); }
+.feeling:active { transform: scale(0.98); }
+.feeling-name {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+/* ---------- PRACTICE LIST ---------- */
+.list-header {
+  background: var(--tint);
+  border-radius: var(--radius);
+  padding: 28px 22px;
+  margin-bottom: 20px;
+}
+.list-header h1 { font-size: 36px; color: var(--accent); }
+.list-header p { margin: 6px 0 0; color: var(--ink-soft); }
+
+.practices { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+
+.practice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: border-color 0.2s ease;
+}
+.practice:hover, .practice:focus-visible { border-color: var(--accent); }
+
+.practice-dot {
+  flex: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--tint);
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+}
+
+.practice-text { flex: 1; min-width: 0; }
+.practice-title {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.practice-meta { font-size: 14px; color: var(--ink-soft); margin-top: 2px; }
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--tint);
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+}
+
+/* ---------- PLAYER ---------- */
+.player { text-align: center; }
+
+.orb-wrap {
+  display: grid;
+  place-items: center;
+  height: 260px;
+  margin: 12px 0 20px;
+}
+.orb {
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0%, var(--tint) 55%, var(--accent) 160%);
+  box-shadow: 0 0 0 18px color-mix(in srgb, var(--tint) 50%, transparent);
+}
+/* The orb slowly "breathes" while playing */
+.playing .orb { animation: breathe 8s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(0.88); } 50% { transform: scale(1.08); } }
+
+.player h1 { font-size: 34px; }
+.player .practice-meta { font-size: 15px; margin-top: 6px; }
+.player .about { color: var(--ink-soft); margin: 14px auto 0; max-width: 320px; }
+
+.progress {
+  margin: 32px 0 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tint);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: inherit;
+  transition: width 0.25s linear;
+}
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  margin-top: 22px;
+}
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--ink-soft);
+  display: grid;
+  place-items: center;
+}
+.play-btn {
+  width: 76px; height: 76px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent);
+  transition: transform 0.15s ease;
+}
+.play-btn:active { transform: scale(0.95); }
+
+.note {
+  margin-top: 30px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+
+.done { margin-top: 18px; font-family: var(--serif); font-size: 22px; color: var(--accent); min-height: 1.4em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen, .playing .orb { animation: none; }
+}
