@@ -29,11 +29,11 @@ const FEELINGS = [
     color: "#DDE8F1",
     accent: "#4F7396",
     practices: [
-      { title: "Set It Down",         type: "Breathwork",        minutes: 3, about: "A slow breath to put down what you're carrying, just for now.", audio: "" },
-      { title: "One Thing at a Time", type: "Guided meditation", minutes: 4, about: "Narrow your attention to a single, simple thing.", audio: "" },
-      { title: "The Long Exhale",     type: "Breathwork",        minutes: 2, about: "Lengthen each out-breath to tell your body it's safe.", audio: "" },
-      { title: "Shoulders Down",      type: "Body scan",         minutes: 5, about: "Soften the places where stress likes to hide.", audio: "" },
-      { title: "Clear the Desk",      type: "Visualization",     minutes: 4, about: "Picture clearing a cluttered space, one item at a time.", audio: "" }
+      { title: "The Long Exhale",     type: "Breathwork",        minutes: 3, about: "Lengthen each out-breath to tell your body it's safe.", audio: "" },
+      { title: "Put It Down",         type: "Visualization",     minutes: 4, about: "Picture setting down what you're carrying, just for now.", audio: "" },
+      { title: "One Next Thing",      type: "Journal prompt",    minutes: 3, about: "Write down the one small next step, and let the rest wait.", audio: "" },
+      { title: "Feet on the Floor",   type: "Grounding",         minutes: 2, about: "Feel the ground holding you steady.", audio: "" },
+      { title: "Clear the Table",     type: "Visualization",     minutes: 5, about: "Picture clearing a cluttered table, one item at a time.", audio: "" }
     ]
   },
   {

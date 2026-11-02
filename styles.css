@@ -106,7 +106,8 @@ button { font: inherit; color: inherit; }
   font-family: var(--serif);
   font-size: 24px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--ink);                                    /* fallback for older browsers */
+  color: color-mix(in srgb, var(--accent) 60%, #000);   /* a darker shade of each feeling's colour */
   line-height: 1.1;
 }
 
