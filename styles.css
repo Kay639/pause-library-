@@ -252,6 +252,96 @@ button { font: inherit; color: inherit; }
 
 .done { margin-top: 18px; font-family: var(--serif); font-size: 22px; color: var(--accent); min-height: 1.4em; }
 
+/* ---------- MEMBERS: sign-in, locks, account line ---------- */
+.account {
+  text-align: right;
+  font-size: 14px;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+.account strong { font-weight: 600; color: var(--ink); }
+.link-btn {
+  background: none;
+  border: none;
+  padding: 4px 0;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.practice.locked .practice-title { color: var(--ink-soft); }
+.tag-members { background: #EFEAE2; color: var(--ink-soft); }
+
+.lock-badge {
+  width: 72px; height: 72px;
+  margin: 28px auto 18px;
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+}
+.lock-badge svg { width: 30px; height: 30px; }
+
+.signin {
+  margin: 26px auto 0;
+  max-width: 360px;
+  text-align: left;
+  display: grid;
+  gap: 10px;
+}
+.signin label { font-size: 15px; font-weight: 600; }
+.signin input {
+  font: inherit;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(47, 43, 40, 0.2);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+}
+.signin input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+
+.primary-btn {
+  display: inline-block;
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+.primary-btn:disabled { opacity: 0.6; cursor: default; }
+a.primary-btn { width: auto; margin-top: 18px; padding: 14px 28px; }
+
+.form-msg { margin: 2px 0 0; font-size: 14px; min-height: 1.4em; color: var(--ink-soft); }
+.form-msg.error { color: #A3443A; }
+.notice {
+  max-width: 360px;
+  margin: 18px auto 0;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #F4E0DD;
+  color: #7A3A33;
+  font-size: 15px;
+}
+.small-print { font-size: 13px; color: var(--ink-soft); max-width: 340px; margin: 18px auto 0; }
+
+.sent {
+  margin: 26px auto 0;
+  max-width: 360px;
+  padding: 22px;
+  border-radius: var(--radius);
+  background: var(--tint);
+}
+.sent h2 { font-size: 26px; color: var(--accent); margin-bottom: 8px; }
+.sent p { margin: 0; color: var(--ink); overflow-wrap: anywhere; }
+
 @media (prefers-reduced-motion: reduce) {
   .screen, .playing .orb { animation: none; }
 }
