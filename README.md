@@ -17,7 +17,7 @@ Three screens, using sample content:
 
 **Members:** the first practice for each feeling is a free sample anyone can play.
 The others are for members, who sign in with an emailed link (no passwords), using Supabase.
-No payments yet.
+The app currently uses a signed-in email account for member access.
 
 ## The files, in plain language
 
@@ -40,9 +40,9 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - **Rename a practice or change its length:** open `data.js`, find it, edit the text between the quotes or the number after `minutes:`.
 - **Change a feeling's colour:** in `data.js`, change `color` (the soft background) and `accent` (the deeper shade).
   Colours are written as codes like `#DDE8F1`. Any "hex colour picker" website will give you these.
-- **Add a real recording:** upload the mp3 to this folder, then in `data.js` put its file name between the quotes after `audio:`, e.g.
-  `audio: "put-it-down.mp3"` (a full web link works too). The player then plays the real file, shows its real length,
-  and the "placeholder" note disappears.
+- **Add a free recording:** put the file in the repository and set the free sample's `audio` field to its path.
+- **Add a member recording:** upload it to the private `member-audio` Storage bucket through the authorised Supabase operator. Set the practice's `memberAudio` to its bucket-relative path, such as `overwhelmed/put-it-down.mp3`. Use lowercase letters, digits and hyphens in the path, with an MP3, M4A, OGG or WAV extension. Keep the recording outside the Git checkout.
+- **Update recording lengths:** with Node.js and FFmpeg's `ffprobe` installed, run `node tools/update-durations.js /path/to/private-recordings`. Keep private files in the same relative paths as in the bucket. The script updates whole-minute labels from measured durations. The player shows the actual time in minutes and seconds.
 
 ## Member sign-in (Supabase)
 
@@ -51,5 +51,11 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - In Supabase → Authentication → URL Configuration, the **Site URL** and a **Redirect URL** must be the site's address
   (`https://kay639.github.io/pause-library-/`), or the email links won't bring people back to the app.
 - Supabase's built-in email sender only sends a few emails per hour. Before inviting real members, set up a custom email (SMTP) service in Supabase.
-- The locks are in the app's screens. Recordings stored in this repository can still be downloaded by anyone who knows
-  the file's address, so put members-only recordings in private Supabase Storage before adding them.
+
+## Private member recordings
+
+After approval, the Supabase operator applies the migration in `supabase/migrations/` and deploys `member-audio` with `--no-verify-jwt`. The function independently validates each caller's bearer token through Supabase Auth, so it works with the project's signing keys. Its service role key comes from the Edge Function environment.
+
+The Storage bucket is private. Browser roles cannot fetch its objects or sign their own URLs. A signed-in email member receives a URL valid for 15 minutes. Anyone who receives that signed URL can use it until it expires. Free samples still play from their existing public paths.
+
+On a local or authorised test project, check that a signed-out visitor can play The Long Exhale, that the signing function returns 401 without a valid session, and that a direct private object URL is refused. With a member session and a test recording, check that playback works and that the signed URL expires.

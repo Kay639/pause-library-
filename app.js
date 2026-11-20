@@ -44,7 +44,7 @@ let session = null;            // who is signed in (null = nobody)
 const RETURN_KEY = "pause-return-to";   // where to go back to after tapping the email link
 
 const isFree = index => index === 0;
-const canPlay = index => isFree(index) || !!session;
+const canPlay = index => isFree(index) || (!!session && !session.user.is_anonymous);
 
 function remember(key, value) {
   try { value == null ? localStorage.removeItem(key) : localStorage.setItem(key, value); } catch (e) {}
@@ -235,13 +235,14 @@ function renderList(feeling) {
 
 /* ---------- Screen 3: Player ---------- */
 
-function renderPlayer(feeling, index) {
+async function renderPlayer(feeling, index) {
   const p = feeling.practices[index];
   setColors(feeling);
   document.title = p.title + " · The Pause Library";
 
   if (!canPlay(index)) { renderLocked(feeling, p); return; }
 
+  const memberAudio = !isFree(index) && p.memberAudio;
   app.innerHTML = `
     <section class="screen player">
       <div style="text-align:left">
@@ -267,10 +268,38 @@ function renderPlayer(feeling, index) {
       </div>
 
       <div class="done"></div>
-      ${p.audio ? "" : '<p class="note">Placeholder player — the real recording will go here.</p>'}
+      ${(isFree(index) ? p.audio : memberAudio) ? "" : '<p class="note">Placeholder player — the real recording will go here.</p>'}
     </section>`;
 
-  startPlayer(p);
+  if (!memberAudio) {
+    startPlayer(p, isFree(index) ? p.audio : "");
+    return;
+  }
+
+  const screen = app.querySelector(".player");
+  const controls = screen.querySelectorAll(".controls button");
+  const status = screen.querySelector(".done");
+  status.setAttribute("role", "status");
+  const loadRecording = async () => {
+    controls.forEach(button => { button.disabled = true; });
+    status.textContent = "Loading recording…";
+    await new Promise(resolve => setTimeout(resolve, 0));
+    if (!screen.isConnected) return;
+    const result = await sb.functions.invoke("member-audio", {
+      body: { path: memberAudio }
+    }).catch(() => null);
+    if (!screen.isConnected) return;
+    if (!result?.data?.signedUrl || result.error) {
+      status.textContent = "Recording unavailable. Choose Play to try again.";
+      screen.querySelector(".play-btn").disabled = false;
+      screen.querySelector(".play-btn").addEventListener("click", loadRecording, { once: true });
+      return;
+    }
+    status.textContent = "";
+    controls.forEach(button => { button.disabled = false; });
+    startPlayer(p, result.data.signedUrl);
+  };
+  await loadRecording();
 }
 
 // Shown instead of the player when a signed-out visitor opens a members-only practice
@@ -321,7 +350,7 @@ function renderSignIn(notice) {
    • If not (for now), it runs a silent timer for the practice's length,
      so the screen behaves exactly as it will with real audio.
 */
-function startPlayer(practice) {
+function startPlayer(practice, audioUrl) {
   const screen   = app.querySelector(".player");
   const playBtn  = app.querySelector(".play-btn");
   const fill     = app.querySelector(".progress-fill");
@@ -330,7 +359,7 @@ function startPlayer(practice) {
   const totalEl  = app.querySelector(".total");
   const doneEl   = app.querySelector(".done");
 
-  const audio = practice.audio ? new Audio(practice.audio) : null;
+  const audio = audioUrl ? new Audio(audioUrl) : null;
   let total = practice.minutes * 60;
   let position = 0;   // seconds listened (used by the placeholder timer)
   let timer = null;
@@ -443,9 +472,9 @@ async function start() {
 
     // Re-draw the screen when someone signs in or out (e.g. in another tab)
     sb.auth.onAuthStateChange((event, newSession) => {
-      const wasIn = !!session;
+      const previousUser = session?.user?.id;
       session = newSession;
-      if (wasIn !== !!session) route();
+      if (previousUser !== session?.user?.id) route();
     });
 
     // Just signed in from the email link? Go back to where they were.

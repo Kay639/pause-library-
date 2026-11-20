@@ -16,7 +16,8 @@
     type    – e.g. Breathwork, Body scan, Grounding.
     minutes – how long it lasts (2–5).
     about   – one sentence shown on the player screen.
-    audio   – (optional) a link to an audio file. Leave as "" until you have one.
+    audio   – (free samples only) a public recording path or URL.
+    memberAudio – (members only) a private member-audio bucket object path.
 
   The FIRST practice in every list is automatically tagged "Free sample".
 */
@@ -30,10 +31,10 @@ const FEELINGS = [
     accent: "#4F7396",
     practices: [
       { title: "The Long Exhale",     type: "Breathwork",        minutes: 4, about: "Lengthen each out-breath to tell your body it's safe.", audio: "the-long-exhale.mp3" },
-      { title: "Put It Down",         type: "Visualization",     minutes: 4, about: "Picture setting down what you're carrying, just for now.", audio: "" },
-      { title: "One Next Thing",      type: "Journal prompt",    minutes: 3, about: "Write down the one small next step, and let the rest wait.", audio: "" },
-      { title: "Feet on the Floor",   type: "Grounding",         minutes: 2, about: "Feel the ground holding you steady.", audio: "" },
-      { title: "Clear the Table",     type: "Visualization",     minutes: 5, about: "Picture clearing a cluttered table, one item at a time.", audio: "" }
+      { title: "Put It Down",         type: "Visualization",     minutes: 4, about: "Picture setting down what you're carrying, just for now.", memberAudio: "" },
+      { title: "One Next Thing",      type: "Journal prompt",    minutes: 3, about: "Write down the one small next step, and let the rest wait.", memberAudio: "" },
+      { title: "Feet on the Floor",   type: "Grounding",         minutes: 2, about: "Feel the ground holding you steady.", memberAudio: "" },
+      { title: "Clear the Table",     type: "Visualization",     minutes: 5, about: "Picture clearing a cluttered table, one item at a time.", memberAudio: "" }
     ]
   },
   {
@@ -44,10 +45,10 @@ const FEELINGS = [
     accent: "#55805F",
     practices: [
       { title: "Come Back Here",      type: "Grounding",         minutes: 2, about: "Use your senses to gently return to this moment.", audio: "" },
-      { title: "Five Things",         type: "Grounding",         minutes: 3, about: "Notice five things you can see, four you can hear…", audio: "" },
-      { title: "Counting Breaths",    type: "Breathwork",        minutes: 4, about: "Count each breath up to ten, then begin again.", audio: "" },
-      { title: "Feet on the Floor",   type: "Body scan",         minutes: 3, about: "Feel the ground holding you steady.", audio: "" },
-      { title: "A Single Thread",     type: "Guided meditation", minutes: 5, about: "Follow one calm thought from beginning to end.", audio: "" }
+      { title: "Five Things",         type: "Grounding",         minutes: 3, about: "Notice five things you can see, four you can hear…", memberAudio: "" },
+      { title: "Counting Breaths",    type: "Breathwork",        minutes: 4, about: "Count each breath up to ten, then begin again.", memberAudio: "" },
+      { title: "Feet on the Floor",   type: "Body scan",         minutes: 3, about: "Feel the ground holding you steady.", memberAudio: "" },
+      { title: "A Single Thread",     type: "Guided meditation", minutes: 5, about: "Follow one calm thought from beginning to end.", memberAudio: "" }
     ]
   },
   {
@@ -58,10 +59,10 @@ const FEELINGS = [
     accent: "#A65F57",
     practices: [
       { title: "The Pause Before",    type: "Breathwork",        minutes: 2, about: "Find the small space between feeling and reacting.", audio: "" },
-      { title: "Cool Down",           type: "Breathwork",        minutes: 3, about: "A cooling breath to bring the heat down.", audio: "" },
-      { title: "Name It to Tame It",  type: "Guided meditation", minutes: 4, about: "Put a gentle name to what you're feeling.", audio: "" },
-      { title: "Unclench",            type: "Body scan",         minutes: 3, about: "Release your jaw, your hands, your chest.", audio: "" },
-      { title: "Soft Response",       type: "Reflection",        minutes: 5, about: "Imagine responding the way you'd like to.", audio: "" }
+      { title: "Cool Down",           type: "Breathwork",        minutes: 3, about: "A cooling breath to bring the heat down.", memberAudio: "" },
+      { title: "Name It to Tame It",  type: "Guided meditation", minutes: 4, about: "Put a gentle name to what you're feeling.", memberAudio: "" },
+      { title: "Unclench",            type: "Body scan",         minutes: 3, about: "Release your jaw, your hands, your chest.", memberAudio: "" },
+      { title: "Soft Response",       type: "Reflection",        minutes: 5, about: "Imagine responding the way you'd like to.", memberAudio: "" }
     ]
   },
   {
@@ -72,10 +73,10 @@ const FEELINGS = [
     accent: "#A2733F",
     practices: [
       { title: "Refill",              type: "Guided meditation", minutes: 3, about: "Let yourself receive, instead of give, for a few minutes.", audio: "" },
-      { title: "Rest Is Allowed",     type: "Body scan",         minutes: 5, about: "Permission to do nothing at all.", audio: "" },
-      { title: "Gentle Energy",       type: "Breathwork",        minutes: 2, about: "A soft, brightening breath to lift you a little.", audio: "" },
-      { title: "Warm Light",          type: "Visualization",     minutes: 4, about: "Imagine warmth slowly filling your body.", audio: "" },
-      { title: "Small Kindness",      type: "Reflection",        minutes: 3, about: "Choose one small kind thing to do for yourself.", audio: "" }
+      { title: "Rest Is Allowed",     type: "Body scan",         minutes: 5, about: "Permission to do nothing at all.", memberAudio: "" },
+      { title: "Gentle Energy",       type: "Breathwork",        minutes: 2, about: "A soft, brightening breath to lift you a little.", memberAudio: "" },
+      { title: "Warm Light",          type: "Visualization",     minutes: 4, about: "Imagine warmth slowly filling your body.", memberAudio: "" },
+      { title: "Small Kindness",      type: "Reflection",        minutes: 3, about: "Choose one small kind thing to do for yourself.", memberAudio: "" }
     ]
   },
   {
@@ -86,10 +87,10 @@ const FEELINGS = [
     accent: "#76679A",
     practices: [
       { title: "Gentle Return",       type: "Grounding",         minutes: 3, about: "Slowly reconnect with the feeling of being here.", audio: "" },
-      { title: "Hands on Heart",      type: "Body scan",         minutes: 2, about: "Feel the warmth and rhythm under your hands.", audio: "" },
-      { title: "Texture and Touch",   type: "Grounding",         minutes: 4, about: "Notice what you can feel against your skin.", audio: "" },
-      { title: "Waking Breath",       type: "Breathwork",        minutes: 3, about: "A steady breath to bring gentle sensation back.", audio: "" },
-      { title: "Something Small",     type: "Reflection",        minutes: 5, about: "Look for one small thing you can feel, even faintly.", audio: "" }
+      { title: "Hands on Heart",      type: "Body scan",         minutes: 2, about: "Feel the warmth and rhythm under your hands.", memberAudio: "" },
+      { title: "Texture and Touch",   type: "Grounding",         minutes: 4, about: "Notice what you can feel against your skin.", memberAudio: "" },
+      { title: "Waking Breath",       type: "Breathwork",        minutes: 3, about: "A steady breath to bring gentle sensation back.", memberAudio: "" },
+      { title: "Something Small",     type: "Reflection",        minutes: 5, about: "Look for one small thing you can feel, even faintly.", memberAudio: "" }
     ]
   },
   {
@@ -100,10 +101,10 @@ const FEELINGS = [
     accent: "#8E7A32",
     practices: [
       { title: "You Are Enough",      type: "Affirmation",       minutes: 3, about: "Kind words to quiet the critic, just for now.", audio: "" },
-      { title: "Remember When",       type: "Reflection",        minutes: 4, about: "Recall a time you handled something hard.", audio: "" },
-      { title: "Steady Ground",       type: "Grounding",         minutes: 2, about: "Feel how solidly you're already standing.", audio: "" },
-      { title: "A Friend's Voice",    type: "Guided meditation", minutes: 5, about: "Speak to yourself the way a good friend would.", audio: "" },
-      { title: "Tall and Rooted",     type: "Body scan",         minutes: 3, about: "Settle into a posture of quiet confidence.", audio: "" }
+      { title: "Remember When",       type: "Reflection",        minutes: 4, about: "Recall a time you handled something hard.", memberAudio: "" },
+      { title: "Steady Ground",       type: "Grounding",         minutes: 2, about: "Feel how solidly you're already standing.", memberAudio: "" },
+      { title: "A Friend's Voice",    type: "Guided meditation", minutes: 5, about: "Speak to yourself the way a good friend would.", memberAudio: "" },
+      { title: "Tall and Rooted",     type: "Body scan",         minutes: 3, about: "Settle into a posture of quiet confidence.", memberAudio: "" }
     ]
   }
 ];
