@@ -285,10 +285,17 @@ async function renderPlayer(feeling, index) {
     status.textContent = "Loading recording…";
     await new Promise(resolve => setTimeout(resolve, 0));
     if (!screen.isConnected) return;
-    const result = await sb.functions.invoke("member-audio", {
-      body: { path: memberAudio }
-    }).catch(() => null);
+    const bucket = typeof PAUSE_LIBRARY_TEST_STORAGE !== "undefined" && PAUSE_LIBRARY_TEST_STORAGE
+      ? "product-content-test"
+      : "product-content";
+    const result = await sb.storage.from(bucket)
+      .createSignedUrl("pause-library/" + memberAudio, 15 * 60)
+      .catch(() => null);
     if (!screen.isConnected) return;
+    if (result?.error && [400, 403, 404].includes(Number(result.error.statusCode))) {
+      status.textContent = "This recording is unavailable to your account.";
+      return;
+    }
     if (!result?.data?.signedUrl || result.error) {
       status.textContent = "Recording unavailable. Choose Play to try again.";
       screen.querySelector(".play-btn").disabled = false;
@@ -332,7 +339,7 @@ function renderSignIn(notice) {
       </div>
       ${session ? `
         <h1>You're signed in</h1>
-        <p class="about">Signed in as <strong>${escapeHtml(session.user.email || "member")}</strong>. All practices are open to you.</p>
+        <p class="about">Signed in as <strong>${escapeHtml(session.user.email || "member")}</strong>. Member recordings require Pause Library access.</p>
         <p><a class="primary-btn" href="#/">Choose how you feel</a></p>` :
       signInBlock({
         heading: "Member sign-in",
@@ -346,7 +353,7 @@ function renderSignIn(notice) {
 
 /*
   The player works two ways:
-   • If the practice has an "audio" link in data.js, it plays that real file.
+   • If the practice has a recording URL, it plays that real file.
    • If not (for now), it runs a silent timer for the practice's length,
      so the screen behaves exactly as it will with real audio.
 */

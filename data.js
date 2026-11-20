@@ -17,7 +17,7 @@
     minutes – how long it lasts (2–5).
     about   – one sentence shown on the player screen.
     audio   – (free samples only) a public recording path or URL.
-    memberAudio – (members only) a private member-audio bucket object path.
+    memberAudio – (members only) an object path inside the private pause-library folder.
 
   The FIRST practice in every list is automatically tagged "Free sample".
 */

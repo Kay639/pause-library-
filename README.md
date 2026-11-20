@@ -17,7 +17,7 @@ Three screens, using sample content:
 
 **Members:** the first practice for each feeling is a free sample anyone can play.
 The others are for members, who sign in with an emailed link (no passwords), using Supabase.
-The app currently uses a signed-in email account for member access.
+Member recordings require an active Pause Library entitlement for the signed-in email address.
 
 ## The files, in plain language
 
@@ -41,7 +41,7 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - **Change a feeling's colour:** in `data.js`, change `color` (the soft background) and `accent` (the deeper shade).
   Colours are written as codes like `#DDE8F1`. Any "hex colour picker" website will give you these.
 - **Add a free recording:** put the file in the repository and set the free sample's `audio` field to its path.
-- **Add a member recording:** upload it to the private `member-audio` Storage bucket through the authorised Supabase operator. Set the practice's `memberAudio` to its bucket-relative path, such as `overwhelmed/put-it-down.mp3`. Use lowercase letters, digits and hyphens in the path, with an MP3, M4A, OGG or WAV extension. Keep the recording outside the Git checkout.
+- **Add a member recording:** upload it to the private `product-content` Storage bucket under `pause-library/` through the authorised Supabase operator. Set the practice's `memberAudio` to its path relative to that folder, such as `overwhelmed/put-it-down.mp3`. Use lowercase letters, digits and hyphens in the path, with an MP3, M4A, OGG or WAV extension. Keep the recording outside the Git checkout.
 - **Update recording lengths:** with Node.js and FFmpeg's `ffprobe` installed, run `node tools/update-durations.js /path/to/private-recordings`. Keep private files in the same relative paths as in the bucket. The script updates whole-minute labels from measured durations. The player shows the actual time in minutes and seconds.
 
 ## Member sign-in (Supabase)
@@ -54,8 +54,8 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 
 ## Private member recordings
 
-After approval, the Supabase operator applies the migration in `supabase/migrations/` and deploys `member-audio` with `--no-verify-jwt`. The function independently validates each caller's bearer token through Supabase Auth, so it works with the project's signing keys. Its service role key comes from the Edge Function environment.
+After approval, the Supabase operator applies the migration in `supabase/migrations/`. It registers the `pause-library` product in the existing access schemas. The Storage policies use `access.has_access` for `product-content` and `access_test.has_access` for `product-content-test`. A signed-in account needs an unrevoked entitlement for its email address before Storage will issue a signed URL. The player requests a 15-minute URL. Anyone who receives that URL can use it until it expires.
 
-The Storage bucket is private. Browser roles cannot fetch its objects or sign their own URLs. A signed-in email member receives a URL valid for 15 minutes. Anyone who receives that signed URL can use it until it expires. Free samples still play from their existing public paths.
+For a test, use a local app configuration with `const PAUSE_LIBRARY_TEST_STORAGE = true;`, a private sample under `product-content-test/pause-library/`, and a test user. The Supabase operator can manually insert an entitlement in `access_test.entitlements` with the test user's lowercase email, product code `pause-library`, and a unique manual test transaction ID. Verify that signed-out users, users without an entitlement and users with a revoked entitlement are denied, and that the test user with an active entitlement can play the sample. The Long Exhale still plays publicly. Keep the test setting out of the published configuration.
 
-On a local or authorised test project, check that a signed-out visitor can play The Long Exhale, that the signing function returns 401 without a valid session, and that a direct private object URL is refused. With a member session and a test recording, check that playback works and that the signed URL expires.
+The migration registers the product only. Billing and production entitlement grants are separate decisions.

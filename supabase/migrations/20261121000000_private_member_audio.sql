@@ -1,12 +1,11 @@
--- Only the trusted member-audio function signs URLs for this bucket.
-insert into storage.buckets (id, name, public)
-values ('member-audio', 'member-audio', false);
+-- Existing private Storage policies call the matching schema's has_access()
+-- with the first folder segment. Register the product without granting access.
+begin;
+insert into access.products (code, name, storage_prefix, active)
+values ('pause-library', 'Pause Library', 'pause-library', true)
+on conflict (code) do nothing;
 
--- Keep browser roles out even if another policy grants broad Storage access.
-create policy "Member audio is managed server-side"
-on storage.objects
-as restrictive
-for all
-to anon, authenticated
-using (bucket_id <> 'member-audio')
-with check (bucket_id <> 'member-audio');
+insert into access_test.products (code, name, storage_prefix, active)
+values ('pause-library', 'Pause Library', 'pause-library', true)
+on conflict (code) do nothing;
+commit;
