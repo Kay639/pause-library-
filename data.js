@@ -19,6 +19,7 @@
     minutes – the real recording length, rounded to the nearest minute
               (from the production and QC log; tools/update-durations.js can re-measure).
     about   – one sentence shown on the player screen.
+    note    – (optional) an approved on-screen note, e.g. a safety line.
     audio   – (free samples only) the public URL of the free copy in the
               pause-library-free Storage bucket.
     memberAudio – the recording's file name inside the private
@@ -79,7 +80,7 @@ const FEELINGS = [
     color: "#F5E7D6",
     accent: "#A2733F",
     practices: [
-      { title: "Rest Is Allowed",     type: "Guided rest",       minutes: 3, about: "Permission to stop, with nothing to do and nowhere to be.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL16_Drained_Rest-Is-Allowed.m4a", memberAudio: "PL16_Drained_Rest-Is-Allowed.m4a" },
+      { title: "Rest Is Allowed",     type: "Guided rest",       minutes: 3, about: "Permission to stop, with nothing to do and nowhere to be.", note: "Best enjoyed lying down or reclining somewhere safe. Do not use while driving.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL16_Drained_Rest-Is-Allowed.m4a", memberAudio: "PL16_Drained_Rest-Is-Allowed.m4a" },
       { title: "Refill",              type: "Visualization",     minutes: 3, about: "Let a soft, warm light fill you back up.", memberAudio: "PL17_Drained_Refill.m4a" },
       { title: "Small Kindness",      type: "Reflection",        minutes: 2, about: "Choose one small kind thing to do for yourself today.", memberAudio: "PL18_Drained_Small-Kindness.m4a" },
       { title: "Slow Sip",            type: "Mindful drink",     minutes: 3, about: "Turn a cup of tea or water into a few minutes of rest.", memberAudio: "PL19_Drained_Slow-Sip.m4a" },
@@ -111,7 +112,7 @@ const FEELINGS = [
       { title: "Ask Your Body",       type: "Intuition check-in", minutes: 3, about: "Check in with your body, and notice what it has to say.", memberAudio: "PL27_Doubting-Myself_Ask-Your-Body.m4a" },
       { title: "Boundary Breath",     type: "Breathwork",        minutes: 3, about: "Breathe in for four and out for six, and make a little space around you.", memberAudio: "PL28_Doubting-Myself_Boundary-Breath.m4a" },
       { title: "Sovereign Stance",    type: "Affirmation",       minutes: 2, about: "Stand or sit tall, and take your sovereign stance.", memberAudio: "PL29_Doubting-Myself_Sovereign-Stance.m4a" },
-      { title: "Evening Reclaim",     type: "Evening release",   minutes: 4, about: "Put down the day, and come back to yourself before you rest.", memberAudio: "PL30_Doubting-Myself_Evening-Reclaim.m4a" }
+      { title: "Evening Reclaim",     type: "Evening release",   minutes: 4, about: "Put down the day, and come back to yourself before you rest.", note: "Best enjoyed lying down or reclining somewhere safe. Do not use while driving.", memberAudio: "PL30_Doubting-Myself_Evening-Reclaim.m4a" }
     ]
   }
 ];

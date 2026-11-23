@@ -274,6 +274,7 @@ async function renderPlayer(feeling, index) {
       <h1>${p.title}</h1>
       <div class="practice-meta">${p.type} · ${minLabel(p.minutes)}</div>
       <p class="about">${p.about}</p>
+      ${p.note ? `<p class="practice-note">${escapeHtml(p.note)}</p>` : ""}
 
       <div class="progress" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="progress-fill"></div>

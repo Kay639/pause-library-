@@ -352,3 +352,6 @@ a.primary-btn { width: auto; margin-top: 18px; padding: 14px 28px; }
 .join-buttons { display: grid; gap: 10px; }
 a.primary-btn.join-btn { display: block; width: 100%; margin: 0; padding: 12px 20px; text-decoration: none; }
 .join-price { display: block; font-size: 13px; font-weight: 400; opacity: 0.9; }
+
+/* Approved on-screen note for a practice (e.g. "Do not use while driving") */
+.practice-note { font-size: 0.9rem; font-style: italic; opacity: 0.85; max-width: 32rem; margin: 0.25rem auto 0.75rem; }
