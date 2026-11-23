@@ -66,6 +66,25 @@ function accountBar() {
   return `<div class="account">Member? <a class="link-btn" href="#/signin">Sign in</a></div>`;
 }
 
+// Join buttons (monthly and yearly) and the "manage membership" link.
+// A signed-in visitor's email is prefilled at checkout, so access lands on
+// the same email they sign in with.
+function joinBlock() {
+  if (typeof MEMBERSHIP === "undefined") return "";
+  const email = session && !session.user.is_anonymous ? session.user.email : "";
+  const link = plan => {
+    const url = email ? plan.url + "?prefilled_email=" + encodeURIComponent(email) : plan.url;
+    return `<a class="primary-btn join-btn" href="${escapeHtml(url)}" target="_blank" rel="noopener">${plan.label}<span class="join-price">${plan.price}</span></a>`;
+  };
+  return `
+    <div class="join">
+      <p class="join-intro">Both plans start with a 7-day free trial.</p>
+      <div class="join-buttons">${link(MEMBERSHIP.monthly)}${link(MEMBERSHIP.yearly)}</div>
+      <p class="small-print">A card is needed to start the trial. Use the same email you sign in with here, so your access matches.
+        Already a member? <a class="link-btn" href="${escapeHtml(MEMBERSHIP.manageUrl)}" target="_blank" rel="noopener">Manage membership</a></p>
+    </div>`;
+}
+
 function wireAccountBar() {
   const out = app.querySelector(".sign-out");
   if (out) out.addEventListener("click", async () => {
@@ -109,7 +128,7 @@ function signInBlock({ heading, intro, returnTo, notice }) {
       <button class="primary-btn" type="submit">Email me a sign-in link</button>
       <p class="form-msg" role="status"></p>
     </form>
-    <p class="small-print">New here? The same link creates your free member account. No password needed.</p>`;
+    <p class="small-print">New here? The same link creates a free account, which opens the free samples. Membership opens all 30 practices. No password needed.</p>`;
 }
 
 function wireSignInForm() {
@@ -255,6 +274,7 @@ async function renderPlayer(feeling, index) {
       <h1>${p.title}</h1>
       <div class="practice-meta">${p.type} · ${minLabel(p.minutes)}</div>
       <p class="about">${p.about}</p>
+      ${p.note ? `<p class="practice-note">${escapeHtml(p.note)}</p>` : ""}
 
       <div class="progress" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="progress-fill"></div>
@@ -293,7 +313,11 @@ async function renderPlayer(feeling, index) {
       .catch(() => null);
     if (!screen.isConnected) return;
     if (result?.error && [400, 403, 404].includes(Number(result.error.statusCode))) {
-      status.textContent = "This recording is unavailable to your account.";
+      status.textContent = "";
+      status.insertAdjacentHTML("afterend", `
+        <p class="about">This practice is for members. Your account (${escapeHtml(session.user.email || "")}) doesn't have Pause Library membership yet. Membership opens all 30 practices.</p>
+        ${joinBlock()}`);
+      screen.querySelectorAll(".controls, .progress, .times").forEach(el => { el.style.display = "none"; });
       return;
     }
     if (!result?.data?.signedUrl || result.error) {
@@ -320,9 +344,10 @@ function renderLocked(feeling, p) {
       <span class="tag tag-members">Members</span>
       ${signInBlock({
         heading: p.title,
-        intro: "This practice is for members. Sign in with your email to listen. The free sample for each feeling is always open.",
+        intro: "This practice is for members. Already a member? Sign in with the email you joined with. The free sample for each feeling is always open.",
         returnTo: location.hash
       })}
+      ${joinBlock()}
     </section>`;
   wireSignInForm();
 }
@@ -339,8 +364,9 @@ function renderSignIn(notice) {
       </div>
       ${session ? `
         <h1>You're signed in</h1>
-        <p class="about">Signed in as <strong>${escapeHtml(session.user.email || "member")}</strong>. Member recordings require Pause Library access.</p>
-        <p><a class="primary-btn" href="#/">Choose how you feel</a></p>` :
+        <p class="about">Signed in as <strong>${escapeHtml(session.user.email || "member")}</strong>. Member recordings require Pause Library membership for this email.</p>
+        <p><a class="primary-btn" href="#/">Choose how you feel</a></p>
+        ${joinBlock()}` :
       signInBlock({
         heading: "Member sign-in",
         intro: "Enter your email and we'll send you a link. Tap it to sign in. No password needed.",
