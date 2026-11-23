@@ -51,7 +51,9 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - Settings live in `config.js`: the **Project URL** and **publishable key**. Both are safe to be public.
 - ⚠️ **Never** put the **secret key** (`sb_secret_…` / `service_role`) or the **database password** in this repository.
 - In Supabase → Authentication → URL Configuration, the **Site URL** and a **Redirect URL** must be the site's address
-  (`https://kay639.github.io/pause-library-/`), or the email links won't bring people back to the app.
+  (`https://pause.kayjoyflowers.online/`), or the email links won't bring people back to the app.
+- The app's address is `https://pause.kayjoyflowers.online/`, set by the `CNAME` file in this repository and a
+  CNAME record (`pause` → `kay639.github.io`) in Spaceship DNS. Don't delete the `CNAME` file, or the address stops working.
 - Supabase's built-in email sender only sends a few emails per hour. Before inviting real members, set up a custom email (SMTP) service in Supabase.
 
 ## Private member recordings
