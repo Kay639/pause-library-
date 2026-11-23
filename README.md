@@ -12,8 +12,9 @@ Three screens, using sample content:
 2. **Practice list** – five practices for the chosen feeling (title, type, length).
    The first one is tagged **Free sample**.
 3. **Player** – a calm "breathing" circle, progress bar, play/pause, and skip ±15 seconds.
-   Practices with a recording play the real audio (so far: **The Long Exhale**, `the-long-exhale.mp3`).
-   The rest use a *placeholder*: a silent timer for the practice's length.
+   All 30 approved recordings are in private Supabase Storage, and member practices play them for members with access.
+   The free sample for Overwhelmed plays `the-long-exhale.mp3` from this repository.
+   The other five free samples use a *placeholder* (a silent timer) until they have a public copy.
 
 **Members:** the first practice for each feeling is a free sample anyone can play.
 The others are for members, who sign in with an emailed link (no passwords), using Supabase.
@@ -41,7 +42,7 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - **Change a feeling's colour:** in `data.js`, change `color` (the soft background) and `accent` (the deeper shade).
   Colours are written as codes like `#DDE8F1`. Any "hex colour picker" website will give you these.
 - **Add a free recording:** put the file in the repository and set the free sample's `audio` field to its path.
-- **Add a member recording:** upload it to the private `product-content` Storage bucket under `pause-library/` through the authorised Supabase operator. Set the practice's `memberAudio` to its path relative to that folder, such as `overwhelmed/put-it-down.mp3`. Use lowercase letters, digits and hyphens in the path, with an MP3, M4A, OGG or WAV extension. Keep the recording outside the Git checkout.
+- **Add a member recording:** upload it to the private `product-content` Storage bucket under `pause-library/` through the authorised Supabase operator. Set the practice's `memberAudio` to its path relative to that folder. The approved recordings use the production log's names, such as `PL02_Overwhelmed_Put-It-Down.m4a`: letters, digits, hyphens and underscores, with an MP3, M4A, OGG or WAV extension. Keep the recording outside the Git checkout.
 - **Update recording lengths:** with Node.js and FFmpeg's `ffprobe` installed, run `node tools/update-durations.js /path/to/private-recordings`. Keep private files in the same relative paths as in the bucket. The script updates whole-minute labels from measured durations. The player shows the actual time in minutes and seconds.
 
 ## Member sign-in (Supabase)
