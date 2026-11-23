@@ -13,11 +13,12 @@ Three screens, using sample content:
    The first one is tagged **Free sample**.
 3. **Player** – a calm "breathing" circle, progress bar, play/pause, and skip ±15 seconds.
    All 30 approved recordings are in private Supabase Storage, and member practices play them for members with access.
-   The free sample for Overwhelmed plays `the-long-exhale.mp3` from this repository.
-   The other five free samples use a *placeholder* (a silent timer) until they have a public copy.
+   The six free samples play from the public `pause-library-free` Storage bucket, which holds only those six files.
 
 **Members:** the first practice for each feeling is a free sample anyone can play.
 The others are for members, who sign in with an emailed link (no passwords), using Supabase.
+Membership is US$10 a month or US$100 a year, each with a 7-day free trial (card required), through the Stripe links in `config.js`.
+Checkout gives access to the email used at checkout, so members sign in with that same email. Signed-in visitors without membership see the Join buttons.
 Member recordings require an active Pause Library entitlement for the signed-in email address.
 
 ## The files, in plain language
@@ -28,7 +29,7 @@ Member recordings require an active Pause Library entitlement for the signed-in 
 | `data.js` | **All the words**: feelings, colours, practice titles, types, lengths. Edit this to change content. |
 | `styles.css` | **The look**: fonts, spacing, colours, rounded corners. |
 | `app.js` | **The behaviour**: which screen to show, how the player works, and member sign-in. |
-| `config.js` | **Supabase settings**: your project address and *publishable* key (both safe to be public). |
+| `config.js` | **Supabase and membership settings**: your project address, *publishable* key, and the Stripe Join and Manage links (all safe to be public). |
 | `vendor/supabase.js` | The Supabase sign-in library (a copy, so the app doesn't depend on another site). Don't edit. |
 
 ## How to view it
@@ -41,7 +42,7 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - **Rename a practice or change its length:** open `data.js`, find it, edit the text between the quotes or the number after `minutes:`.
 - **Change a feeling's colour:** in `data.js`, change `color` (the soft background) and `accent` (the deeper shade).
   Colours are written as codes like `#DDE8F1`. Any "hex colour picker" website will give you these.
-- **Add a free recording:** put the file in the repository and set the free sample's `audio` field to its path.
+- **Add a free recording:** the Supabase operator copies it into the public `pause-library-free` bucket. Set the free sample's `audio` field to its public URL. Keep audio files out of this repository.
 - **Add a member recording:** upload it to the private `product-content` Storage bucket under `pause-library/` through the authorised Supabase operator. Set the practice's `memberAudio` to its path relative to that folder. The approved recordings use the production log's names, such as `PL02_Overwhelmed_Put-It-Down.m4a`: letters, digits, hyphens and underscores, with an MP3, M4A, OGG or WAV extension. Keep the recording outside the Git checkout.
 - **Update recording lengths:** with Node.js and FFmpeg's `ffprobe` installed, run `node tools/update-durations.js /path/to/private-recordings`. Keep private files in the same relative paths as in the bucket. The script updates whole-minute labels from measured durations. The player shows the actual time in minutes and seconds.
 
@@ -57,6 +58,6 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 
 After approval, the Supabase operator applies the migration in `supabase/migrations/`. It registers the `pause-library` product in the existing access schemas. The Storage policies use `access.has_access` for `product-content` and `access_test.has_access` for `product-content-test`. A signed-in account needs an unrevoked entitlement for its email address before Storage will issue a signed URL. The player requests a 15-minute URL. Anyone who receives that URL can use it until it expires.
 
-For a test, use a local app configuration with `const PAUSE_LIBRARY_TEST_STORAGE = true;`, a private sample under `product-content-test/pause-library/`, and a test user. The Supabase operator can manually insert an entitlement in `access_test.entitlements` with the test user's lowercase email, product code `pause-library`, and a unique manual test transaction ID. Verify that signed-out users, users without an entitlement and users with a revoked entitlement are denied, and that the test user with an active entitlement can play the sample. The Long Exhale still plays publicly. Keep the test setting out of the published configuration.
+For a test, use a local app configuration with `const PAUSE_LIBRARY_TEST_STORAGE = true;`, a private sample under `product-content-test/pause-library/`, and a test user. The Supabase operator can manually insert an entitlement in `access_test.entitlements` with the test user's lowercase email, product code `pause-library`, and a unique manual test transaction ID. Verify that signed-out users, users without an entitlement and users with a revoked entitlement are denied, and that the test user with an active entitlement can play the sample. The six free samples still play publicly. Keep the test setting out of the published configuration.
 
 The migration registers the product only. Billing and production entitlement grants are separate decisions.

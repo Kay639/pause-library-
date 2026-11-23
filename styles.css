@@ -345,3 +345,10 @@ a.primary-btn { width: auto; margin-top: 18px; padding: 14px 28px; }
 @media (prefers-reduced-motion: reduce) {
   .screen, .playing .orb { animation: none; }
 }
+
+/* ---------- MEMBERSHIP: join buttons ---------- */
+.join { max-width: 360px; margin: 28px auto 0; }
+.join-intro { margin: 0 0 12px; color: var(--ink-soft); }
+.join-buttons { display: grid; gap: 10px; }
+a.primary-btn.join-btn { display: block; width: 100%; margin: 0; padding: 12px 20px; text-decoration: none; }
+.join-price { display: block; font-size: 13px; font-weight: 400; opacity: 0.9; }

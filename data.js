@@ -19,8 +19,8 @@
     minutes – the real recording length, rounded to the nearest minute
               (from the production and QC log; tools/update-durations.js can re-measure).
     about   – one sentence shown on the player screen.
-    audio   – (free samples only) a public recording path or URL.
-              Leave it "" until the free sample has a public copy.
+    audio   – (free samples only) the public URL of the free copy in the
+              pause-library-free Storage bucket.
     memberAudio – the recording's file name inside the private
               product-content/pause-library/ folder.
 
@@ -37,7 +37,7 @@ const FEELINGS = [
     color: "#DDE8F1",
     accent: "#4F7396",
     practices: [
-      { title: "The Long Exhale",     type: "Breathwork",        minutes: 4, about: "Lengthen each out-breath to tell your body it's safe.", audio: "the-long-exhale.mp3", memberAudio: "PL01_Overwhelmed_The-Long-Exhale.m4a" },
+      { title: "The Long Exhale",     type: "Breathwork",        minutes: 4, about: "Lengthen each out-breath to tell your body it's safe.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL01_Overwhelmed_The-Long-Exhale.m4a", memberAudio: "PL01_Overwhelmed_The-Long-Exhale.m4a" },
       { title: "Put It Down",         type: "Visualization",     minutes: 3, about: "Picture setting down what you're carrying, just for now.", memberAudio: "PL02_Overwhelmed_Put-It-Down.m4a" },
       { title: "One Next Thing",      type: "Journal prompt",    minutes: 3, about: "Write down the one small next step, and let the rest wait.", memberAudio: "PL03_Overwhelmed_One-Next-Thing.m4a" },
       { title: "Feet on the Floor",   type: "Grounding",         minutes: 2, about: "Feel the ground holding you steady.", memberAudio: "PL04_Overwhelmed_Feet-on-the-Floor.m4a" },
@@ -51,7 +51,7 @@ const FEELINGS = [
     color: "#DFEBE1",
     accent: "#55805F",
     practices: [
-      { title: "Gather Yourself",     type: "Body scan",         minutes: 2, about: "A quick scan from head to feet that brings all of you back to one place.", audio: "", memberAudio: "PL06_Scattered_Gather-Yourself.m4a" },
+      { title: "Gather Yourself",     type: "Body scan",         minutes: 2, about: "A quick scan from head to feet that brings all of you back to one place.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL06_Scattered_Gather-Yourself.m4a", memberAudio: "PL06_Scattered_Gather-Yourself.m4a" },
       { title: "Five Things",         type: "Grounding",         minutes: 2, about: "Count down from five to one through your senses, back to the room you're in.", memberAudio: "PL07_Scattered_Five-Things.m4a" },
       { title: "Counting Breaths",    type: "Breathwork",        minutes: 3, about: "Count each out-breath up to ten, then begin again.", memberAudio: "PL08_Scattered_Counting-Breaths.m4a" },
       { title: "A Single Thread",     type: "Focus",             minutes: 4, about: "Rest your attention on one sound or object nearby.", memberAudio: "PL09_Scattered_A-Single-Thread.m4a" },
@@ -65,7 +65,7 @@ const FEELINGS = [
     color: "#F4E0DD",
     accent: "#A65F57",
     practices: [
-      { title: "The Pause Before",    type: "Breathwork",        minutes: 2, about: "Find the small space between feeling and reacting.", audio: "", memberAudio: "PL11_Reactive_The-Pause-Before.m4a" },
+      { title: "The Pause Before",    type: "Breathwork",        minutes: 2, about: "Find the small space between feeling and reacting.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL11_Reactive_The-Pause-Before.m4a", memberAudio: "PL11_Reactive_The-Pause-Before.m4a" },
       { title: "Cool the Fire",       type: "Breathwork",        minutes: 2, about: "Cool air in, a soft sigh out, to let some of the heat go.", memberAudio: "PL12_Reactive_Cool-the-Fire.m4a" },
       { title: "What's Underneath?",  type: "Inquiry",           minutes: 3, about: "Gently look beneath a strong reaction to what's really there.", memberAudio: "PL13_Reactive_Whats-Underneath.m4a" },
       { title: "Shake It Out",        type: "Movement",          minutes: 2, about: "Shake off some of the charge, standing or seated.", memberAudio: "PL14_Reactive_Shake-It-Out.m4a" },
@@ -79,7 +79,7 @@ const FEELINGS = [
     color: "#F5E7D6",
     accent: "#A2733F",
     practices: [
-      { title: "Rest Is Allowed",     type: "Guided rest",       minutes: 3, about: "Permission to stop, with nothing to do and nowhere to be.", audio: "", memberAudio: "PL16_Drained_Rest-Is-Allowed.m4a" },
+      { title: "Rest Is Allowed",     type: "Guided rest",       minutes: 3, about: "Permission to stop, with nothing to do and nowhere to be.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL16_Drained_Rest-Is-Allowed.m4a", memberAudio: "PL16_Drained_Rest-Is-Allowed.m4a" },
       { title: "Refill",              type: "Visualization",     minutes: 3, about: "Let a soft, warm light fill you back up.", memberAudio: "PL17_Drained_Refill.m4a" },
       { title: "Small Kindness",      type: "Reflection",        minutes: 2, about: "Choose one small kind thing to do for yourself today.", memberAudio: "PL18_Drained_Small-Kindness.m4a" },
       { title: "Slow Sip",            type: "Mindful drink",     minutes: 3, about: "Turn a cup of tea or water into a few minutes of rest.", memberAudio: "PL19_Drained_Slow-Sip.m4a" },
@@ -93,7 +93,7 @@ const FEELINGS = [
     color: "#E7E2F0",
     accent: "#76679A",
     practices: [
-      { title: "Find One Sensation",  type: "Grounding",         minutes: 2, about: "Look for just one small sensation. Even a faint one is enough.", audio: "", memberAudio: "PL21_Numb_Find-One-Sensation.m4a" },
+      { title: "Find One Sensation",  type: "Grounding",         minutes: 2, about: "Look for just one small sensation. Even a faint one is enough.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL21_Numb_Find-One-Sensation.m4a", memberAudio: "PL21_Numb_Find-One-Sensation.m4a" },
       { title: "Hands on Heart",      type: "Warming touch",     minutes: 2, about: "Feel the warmth and rhythm under your hands.", memberAudio: "PL22_Numb_Hands-on-Heart.m4a" },
       { title: "Name It to Feel It",  type: "Journal prompt",    minutes: 2, about: "Put a few words on the page and see what's there.", memberAudio: "PL23_Numb_Name-It-to-Feel-It.m4a" },
       { title: "Sound Landing",       type: "Listening",         minutes: 2, about: "Listen from far away to close by, and land on one sound.", memberAudio: "PL24_Numb_Sound-Landing.m4a" },
@@ -107,7 +107,7 @@ const FEELINGS = [
     color: "#F2EBCF",
     accent: "#8E7A32",
     practices: [
-      { title: "Remember Who You Are", type: "Reconnection",     minutes: 3, about: "Move the critic to the edge of the room, and remember who you are.", audio: "", memberAudio: "PL26_Doubting-Myself_Remember-Who-You-Are.m4a" },
+      { title: "Remember Who You Are", type: "Reconnection",     minutes: 3, about: "Move the critic to the edge of the room, and remember who you are.", audio: "https://zsdcuoxdlbbytuoiwbsn.supabase.co/storage/v1/object/public/pause-library-free/PL26_Doubting-Myself_Remember-Who-You-Are.m4a", memberAudio: "PL26_Doubting-Myself_Remember-Who-You-Are.m4a" },
       { title: "Ask Your Body",       type: "Intuition check-in", minutes: 3, about: "Check in with your body, and notice what it has to say.", memberAudio: "PL27_Doubting-Myself_Ask-Your-Body.m4a" },
       { title: "Boundary Breath",     type: "Breathwork",        minutes: 3, about: "Breathe in for four and out for six, and make a little space around you.", memberAudio: "PL28_Doubting-Myself_Boundary-Breath.m4a" },
       { title: "Sovereign Stance",    type: "Affirmation",       minutes: 2, about: "Stand or sit tall, and take your sovereign stance.", memberAudio: "PL29_Doubting-Myself_Sovereign-Stance.m4a" },
