@@ -53,6 +53,56 @@ function recall(key) {
   try { return localStorage.getItem(key); } catch (e) { return null; }
 }
 
+/* ---------- Which ad brought the visitor (no cookies, no personal data) ---------- */
+
+/*
+  Ad links carry utm_source, utm_campaign and utm_content. On arrival they are
+  joined into one short tag (for example meta_pl_ad001_hero_a) and kept on this
+  device for 30 days. The first tag wins. The Join buttons pass it to Stripe as
+  client_reference_id. The utm_* parameters are then removed from the address.
+*/
+const REF_KEY = "pl_ref";
+const REF_DAYS = 30;
+const REF_MAX_AGE = REF_DAYS * 24 * 60 * 60 * 1000;
+const REF_PATTERN = /^[A-Za-z0-9_-]{1,200}$/;
+
+function buildRef(params) {
+  const parts = ["utm_source", "utm_campaign", "utm_content"]
+    .map(name => (params.get(name) || "").replace(/[^A-Za-z0-9_-]/g, ""))
+    .filter(Boolean);
+  return parts.join("_").slice(0, 200);
+}
+
+// The saved tag, or "" if there is none, it is malformed, or it has expired
+function adRef() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(REF_KEY)); } catch (e) { saved = null; }
+  if (!saved) return "";
+  const age = Date.now() - Number(saved.ts);
+  if (typeof saved.ref === "string" && REF_PATTERN.test(saved.ref) && age >= 0 && age < REF_MAX_AGE) {
+    return saved.ref;
+  }
+  try { localStorage.removeItem(REF_KEY); } catch (e) {}
+  return "";
+}
+
+function captureAdRef() {
+  let params;
+  try { params = new URLSearchParams(location.search); } catch (e) { return; }
+  const names = [...params.keys()].filter(name => /^utm_/i.test(name));
+  if (!names.length) return;
+
+  const ref = buildRef(params);
+  if (ref && !adRef()) {
+    try { localStorage.setItem(REF_KEY, JSON.stringify({ ref, ts: Date.now() })); } catch (e) {}
+  }
+
+  // Tidy the address bar, keeping the path, any other parameters and the #/ route
+  names.forEach(name => params.delete(name));
+  const query = params.toString();
+  try { history.replaceState(history.state, "", location.pathname + (query ? "?" + query : "") + location.hash); } catch (e) {}
+}
+
 function escapeHtml(text) {
   return String(text).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
@@ -69,11 +119,20 @@ function accountBar() {
 // Join buttons (monthly and yearly) and the "manage membership" link.
 // A signed-in visitor's email is prefilled at checkout, so access lands on
 // the same email they sign in with.
+// If the visitor arrived from a tagged ad link, the tag goes to Stripe as
+// client_reference_id, so each trial shows which ad brought it.
 function joinBlock() {
   if (typeof MEMBERSHIP === "undefined") return "";
   const email = session && !session.user.is_anonymous ? session.user.email : "";
+  const ref = adRef();
   const link = plan => {
-    const url = email ? plan.url + "?prefilled_email=" + encodeURIComponent(email) : plan.url;
+    let url = plan.url;
+    try {
+      const u = new URL(plan.url);
+      if (email) u.searchParams.set("prefilled_email", email);
+      if (ref) u.searchParams.set("client_reference_id", ref);
+      url = u.toString();
+    } catch (e) {}
     return `<a class="primary-btn join-btn" href="${escapeHtml(url)}" target="_blank" rel="noopener">${plan.label}<span class="join-price">${plan.price}</span></a>`;
   };
   return `
@@ -496,6 +555,7 @@ function route() {
 /* ---------- Starting the app ---------- */
 
 async function start() {
+  captureAdRef();
   if (sb) {
     // This also finishes signing in if the person just tapped their email link
     try {

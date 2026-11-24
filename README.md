@@ -45,6 +45,7 @@ To see it as a phone would, make the browser window narrow, or open it on your p
 - **Add a free recording:** the Supabase operator copies it into the public `pause-library-free` bucket. Set the free sample's `audio` field to its public URL. Keep audio files out of this repository.
 - **Add a member recording:** upload it to the private `product-content` Storage bucket under `pause-library/` through the authorised Supabase operator. Set the practice's `memberAudio` to its path relative to that folder. The approved recordings use the production log's names, such as `PL02_Overwhelmed_Put-It-Down.m4a`: letters, digits, hyphens and underscores, with an MP3, M4A, OGG or WAV extension. Keep the recording outside the Git checkout.
 - **Update recording lengths:** with Node.js and FFmpeg's `ffprobe` installed, run `node tools/update-durations.js /path/to/private-recordings`. Keep private files in the same relative paths as in the bucket. The script updates whole-minute labels from measured durations. The player shows the actual time in minutes and seconds.
+- **See which ad brought a trial:** ad links carry `utm_source`, `utm_campaign` and `utm_content`. The app keeps them on the device for 30 days as one tag, such as `meta_pl_ad001_hero_a`, and the Join buttons send it to Stripe as `client_reference_id`. No cookies, pixel or personal data. To check it, run `node tools/check-ad-ref.js`.
 
 ## Member sign-in (Supabase)
 
