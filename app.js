@@ -52,6 +52,32 @@ const TYPE_ICON = {
   "Journal prompt": "journal", "Reflection": "journal", "Inquiry": "journal",
   "Visualization": "lotus", "Focus": "lotus", "Listening": "lotus", "Intuition check-in": "lotus", "Mindful drink": "lotus"
 };
+// Which nature scene surrounds each practice in the player (Inner Style Board).
+// A practice can choose its own with  scene: "ferns"  in data.js.
+const TYPE_SCENE = {
+  "Breathwork": "water-ripples", "Listening": "water-ripples",
+  "Grounding": "tree-roots",
+  "Body scan": "river-stones", "Intuition check-in": "river-stones",
+  "Movement": "fern-forest", "Mindful drink": "fern-forest",
+  "Reconnection": "ferns", "Focus": "ferns",
+  "Guided rest": "lavender-mountains", "Visualization": "lavender-mountains",
+  "Evening release": "sunset-shore", "Affirmation": "sunset-shore",
+  "Self-compassion": "stones-water", "Warming touch": "stones-water",
+  "Journal prompt": "woodland-path", "Reflection": "woodland-path", "Inquiry": "woodland-path"
+};
+// Where the eye rests in each portrait, for the scene window above the controls
+const SCENE_FOCUS = {
+  "water-ripples": "50% 50%", "tree-roots": "50% 62%", "river-stones": "40% 55%",
+  "fern-forest": "45% 55%", "ferns": "45% 55%", "lavender-mountains": "50% 30%",
+  "stones-water": "60% 50%", "woodland-path": "50% 45%", "sunset-shore": "70% 30%"
+};
+const sceneFor = p => p.scene || TYPE_SCENE[p.type] || "sunset-shore";
+
+// The full-screen backdrop (softly blurred) plus a crisp window of the same scene
+function sceneBackdrop(scene) {
+  return `<div class="scene-bg" aria-hidden="true" style="background-image:url('images/scenes/${scene}-bg.jpg')"></div>`;
+}
+
 const practiceIcon = type => ICON["p_" + (TYPE_ICON[type] || "lotus")];
 
 /* ---------- Members (Supabase sign-in) ---------- */
@@ -370,7 +396,8 @@ function renderList(feeling) {
 
   const banner = feeling.inner || feeling.image;
   app.innerHTML = `
-    <section class="screen">
+    <section class="screen immersive list-screen">
+      ${sceneBackdrop(feeling.scene || "sunset-shore")}
       <a class="back" href="#/">${ICON.back} All feelings</a>
       <header class="list-header${banner ? " has-image" : ""}">
         ${banner ? `<img class="list-header-img" src="${banner}" alt="">` : ""}
@@ -393,16 +420,23 @@ async function renderPlayer(feeling, index) {
   if (!canPlay(index)) { renderLocked(feeling, p); return; }
 
   const memberAudio = !isFree(index) && p.memberAudio;
+  const scene = sceneFor(p);
   app.innerHTML = `
-    <section class="screen player">
+    <section class="screen player immersive">
+      ${sceneBackdrop(scene)}
       <div style="text-align:left">
         <a class="back" href="#/feeling/${feeling.id}">${ICON.back} ${feeling.name}</a>
       </div>
 
-      <div class="orb-wrap"><div class="orb" aria-hidden="true"></div></div>
+      <div class="scene-window">
+        <img class="scene-img" src="images/scenes/${scene}-bg.jpg" alt="" decoding="async" style="object-position:${SCENE_FOCUS[scene] || "50% 50%"}">
+        <div class="orb-wrap"><div class="orb" aria-hidden="true"><img src="images/golden-lotus.png" alt="" width="467" height="373"></div></div>
+      </div>
 
-      ${index === 0 ? '<span class="tag">Free sample</span>' : ""}
+      <div class="glass">
+      ${index === 0 ? '<span class="tag tag-free">Free sample</span>' : ""}
       <h1>${p.title}</h1>
+      <div class="title-swash">${ICON.swash}</div>
       <div class="practice-meta">${p.type} · ${minLabel(p.minutes)}</div>
       <p class="about">${p.about}</p>
       ${p.note ? `<p class="practice-note">${escapeHtml(p.note)}</p>` : ""}
@@ -420,6 +454,7 @@ async function renderPlayer(feeling, index) {
 
       <div class="done"></div>
       ${(isFree(index) ? p.audio : memberAudio) ? "" : '<p class="note">Placeholder player — the real recording will go here.</p>'}
+      </div>
     </section>`;
 
   if (!memberAudio) {
@@ -467,10 +502,12 @@ async function renderPlayer(feeling, index) {
 // Shown instead of the player when a signed-out visitor opens a members-only practice
 function renderLocked(feeling, p) {
   app.innerHTML = `
-    <section class="screen player locked-screen">
+    <section class="screen player locked-screen immersive">
+      ${sceneBackdrop(sceneFor(p))}
       <div style="text-align:left">
         <a class="back" href="#/feeling/${feeling.id}">${ICON.back} ${feeling.name}</a>
       </div>
+      <div class="glass">
       <div class="lock-badge" aria-hidden="true">${ICON.lock}</div>
       <span class="tag tag-members">Members</span>
       ${signInBlock({
@@ -479,6 +516,7 @@ function renderLocked(feeling, p) {
         returnTo: location.hash
       })}
       ${joinBlock()}
+      </div>
     </section>`;
   wireSignInForm();
 }
@@ -489,10 +527,12 @@ function renderSignIn(notice) {
   setColors(null);
   document.title = "Sign in · The Pause Library";
   app.innerHTML = `
-    <section class="screen player">
+    <section class="screen player immersive">
+      ${sceneBackdrop("sunset-shore")}
       <div style="text-align:left">
         <a class="back" href="#/">${ICON.back} All feelings</a>
       </div>
+      <div class="glass">
       ${session ? `
         <h1>You're signed in</h1>
         <p class="about">Signed in as <strong>${escapeHtml(session.user.email || "member")}</strong>. Member recordings require Pause Library membership for this email.</p>
@@ -504,6 +544,7 @@ function renderSignIn(notice) {
         returnTo: "#/",
         notice
       })}
+      </div>
     </section>`;
   wireSignInForm();
 }

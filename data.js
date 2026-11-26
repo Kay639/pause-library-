@@ -13,7 +13,9 @@
     accent  – a deeper version of the colour, used for buttons and text.
     image   – the photo shown on that feeling's tile and page header
               (in images/feelings/; no words in the picture, the app adds the name).
-    inner   – the nature photo for that feeling's own page header (images/inner/).
+    inner   – the nature photo for that feeling's own page header (images/scenes/).
+    scene   – the nature scene behind that feeling's page (images/scenes/<scene>-bg.jpg).
+              A practice can also have its own  scene:  to choose its player backdrop.
     practices – a list of five practices.
 
   Each practice has:
@@ -37,7 +39,8 @@ const FEELINGS = [
   {
     id: "overwhelmed",
     image: "images/feelings/overwhelmed.jpg",
-    inner: "images/inner/overwhelmed.jpg",
+    inner: "images/scenes/river-stones.jpg",
+    scene: "river-stones",
     name: "Overwhelmed",
     prompt: "When everything feels like too much.",
     color: "#DDE8F1",
@@ -53,7 +56,8 @@ const FEELINGS = [
   {
     id: "scattered",
     image: "images/feelings/scattered.jpg",
-    inner: "images/inner/scattered.jpg",
+    inner: "images/scenes/ferns.jpg",
+    scene: "ferns",
     name: "Scattered",
     prompt: "When your mind is in a hundred places.",
     color: "#DFEBE1",
@@ -69,7 +73,8 @@ const FEELINGS = [
   {
     id: "reactive",
     image: "images/feelings/reactive.jpg",
-    inner: "images/inner/reactive.jpg",
+    inner: "images/scenes/water-ripples.jpg",
+    scene: "water-ripples",
     name: "Reactive",
     prompt: "When you're about to snap, or just did.",
     color: "#F4E0DD",
@@ -85,7 +90,8 @@ const FEELINGS = [
   {
     id: "drained",
     image: "images/feelings/drained.jpg",
-    inner: "images/inner/drained.jpg",
+    inner: "images/scenes/tree-roots.jpg",
+    scene: "tree-roots",
     name: "Drained",
     prompt: "When you have nothing left to give.",
     color: "#F5E7D6",
@@ -101,7 +107,8 @@ const FEELINGS = [
   {
     id: "numb",
     image: "images/feelings/numb.jpg",
-    inner: "images/inner/numb.jpg",
+    inner: "images/scenes/lavender-mountains.jpg",
+    scene: "lavender-mountains",
     name: "Numb",
     prompt: "When you can't quite feel anything.",
     color: "#E7E2F0",
@@ -117,7 +124,8 @@ const FEELINGS = [
   {
     id: "doubting-myself",
     image: "images/feelings/doubting-myself.jpg",
-    inner: "images/inner/doubting-myself.jpg",
+    inner: "images/scenes/woodland-path.jpg",
+    scene: "woodland-path",
     name: "Doubting Myself",
     prompt: "When the inner critic is loud.",
     color: "#F2EBCF",
