@@ -552,3 +552,116 @@ a.primary-btn.join-btn { display: block; width: 100%; margin: 0; padding: 12px 2
 .lock-badge { background: rgba(255, 248, 237, 0.9); color: var(--bronze); box-shadow: inset 0 0 0 1.5px var(--gold); }
 .sent { background: rgba(255, 248, 237, 0.9); }
 .signin input { background: var(--ivory); }
+
+/* =========================================================
+   IMMERSIVE NATURE SCREENS (27 Nov 2026, Kay's direction)
+   Feeling pages, player, members and sign-in sit inside a
+   photographic nature scene, with warm translucent glass.
+   ========================================================= */
+.immersive { position: relative; }
+/* behind the scene, a deep dusk colour (never plain lavender) */
+body:has(.immersive) { background: #3A2440; }
+.scene-bg {
+  position: fixed; inset: -24px; z-index: -2;
+  background-size: cover; background-position: center;
+  transform: translateZ(0);
+}
+.scene-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 60% at 50% 18%, rgba(255, 214, 160, 0.18), rgba(255, 214, 160, 0) 60%),
+    linear-gradient(180deg, rgba(40, 24, 46, 0.35) 0%, rgba(40, 24, 46, 0.15) 35%, rgba(40, 24, 46, 0.55) 100%);
+}
+.immersive .back { color: var(--ivory); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5); }
+
+/* Warm frosted glass for text and controls */
+.glass {
+  position: relative;
+  margin-top: 18px;
+  padding: 24px 22px 26px;
+  border-radius: 28px;
+  background: rgba(46, 28, 52, 0.42);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+          backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow: 0 14px 40px rgba(20, 8, 24, 0.35), inset 0 0 0 1px rgba(255, 236, 200, 0.18);
+  color: var(--ivory);
+  text-align: center;
+}
+
+/* ---- Player ---- */
+.player.immersive h1 { color: var(--ivory); font-size: 36px; font-weight: 600; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35); }
+.title-swash { width: 150px; height: 8px; margin: 8px auto 10px; color: var(--gold); }
+.title-swash svg { display: block; width: 100%; height: 100%; }
+.player.immersive .practice-meta { color: #F1CF8C; font-size: 15px; letter-spacing: 0.03em; margin-top: 0; }
+.player.immersive .about { color: rgba(255, 248, 237, 0.92); }
+.player.immersive .practice-note { color: rgba(255, 248, 237, 0.85); }
+
+/* The scene, crisp, in a softly glowing window; the lotus breathes over it */
+.scene-window {
+  position: relative;
+  margin: 4px 0 0;
+  height: 250px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 16px 44px rgba(20, 8, 24, 0.4), inset 0 0 0 1px rgba(255, 236, 200, 0.25);
+}
+.scene-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.scene-window::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(60% 55% at 50% 50%, rgba(40, 24, 46, 0.05), rgba(40, 24, 46, 0.35) 100%);
+}
+.immersive .orb-wrap { position: absolute; inset: 0; z-index: 1; height: auto; margin: 0; display: grid; place-items: center; }
+.immersive .orb {
+  width: 170px; height: 170px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle, rgba(255, 228, 170, 0.55) 0%, rgba(255, 200, 140, 0.22) 40%, rgba(255, 200, 140, 0) 70%);
+  box-shadow: none;
+}
+.immersive .orb img { width: 128px; height: auto; filter: drop-shadow(0 0 14px rgba(255, 214, 140, 0.85)); }
+/* breathing: the lotus and its light swell and settle while the practice plays */
+.immersive.playing .orb { animation: breathe 8s ease-in-out infinite, glow 8s ease-in-out infinite; }
+@keyframes glow { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+
+.player.immersive .progress { margin-top: 22px; background: rgba(255, 248, 237, 0.22); }
+.player.immersive .progress-fill { background: linear-gradient(90deg, #E6BE6E, #F4B69D); }
+.player.immersive .times { color: rgba(255, 248, 237, 0.8); }
+.player.immersive .icon-btn { color: #F1CF8C; }
+.player.immersive .play-btn {
+  background: radial-gradient(circle at 35% 30%, #F0CD82, #C48E3C 70%);
+  color: #3B2440;
+  box-shadow: 0 10px 28px rgba(196, 142, 60, 0.45), 0 0 0 6px rgba(255, 236, 200, 0.15);
+}
+.player.immersive .done { color: #F1CF8C; }
+.player.immersive .note { color: rgba(255, 248, 237, 0.75); }
+
+/* Tags on glass */
+.glass .tag-free { background: rgba(217, 170, 85, 0.28); color: #FBE3B0; }
+.glass .tag-members { background: rgba(255, 248, 237, 0.18); color: var(--ivory); }
+
+/* Members / sign-in on glass */
+.immersive .glass .lock-badge { margin-top: 4px; background: rgba(255, 248, 237, 0.14); color: #F1CF8C; box-shadow: inset 0 0 0 1.5px rgba(217, 170, 85, 0.8); }
+.immersive .glass h1 { color: var(--ivory); }
+.immersive .glass .about, .immersive .glass .small-print, .immersive .glass .join-intro { color: rgba(255, 248, 237, 0.88); }
+.immersive .glass .signin label { color: var(--ivory); }
+.immersive .glass .signin input { background: rgba(255, 248, 237, 0.95); color: var(--plum); border-color: transparent; }
+.immersive .glass .form-msg { color: rgba(255, 248, 237, 0.85); }
+.immersive .glass .form-msg.error { color: #FFC2B5; }
+.immersive .glass .primary-btn { background: radial-gradient(circle at 35% 30%, #F0CD82, #C48E3C 75%); color: #3B2440; }
+.immersive .glass .link-btn { color: #F1CF8C; }
+.immersive .glass .sent { background: rgba(255, 248, 237, 0.14); }
+.immersive .glass .sent h2, .immersive .glass .sent p { color: var(--ivory); }
+.immersive .glass .notice { background: rgba(255, 194, 181, 0.2); color: var(--ivory); }
+
+/* ---- Feeling page on its scene ---- */
+.list-screen .list-header.has-image { box-shadow: 0 16px 44px rgba(20, 8, 24, 0.4), inset 0 0 0 1px rgba(255, 236, 200, 0.25); }
+.list-screen .practice {
+  background: rgba(255, 248, 237, 0.82);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border-color: rgba(217, 170, 85, 0.45);
+}
+.list-screen .page-lotus { filter: drop-shadow(0 0 16px rgba(255, 214, 140, 0.7)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .immersive.playing .orb { animation: none; }
+}
