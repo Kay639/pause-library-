@@ -11,6 +11,8 @@
     prompt  – the gentle line shown at the top of that feeling's page.
     color   – the soft background colour for that feeling.
     accent  – a deeper version of the colour, used for buttons and text.
+    image   – the photo shown on that feeling's tile and page header
+              (in images/feelings/; no words in the picture, the app adds the name).
     practices – a list of five practices.
 
   Each practice has:
@@ -33,6 +35,7 @@
 const FEELINGS = [
   {
     id: "overwhelmed",
+    image: "images/feelings/overwhelmed.jpg",
     name: "Overwhelmed",
     prompt: "When everything feels like too much.",
     color: "#DDE8F1",
@@ -47,6 +50,7 @@ const FEELINGS = [
   },
   {
     id: "scattered",
+    image: "images/feelings/scattered.jpg",
     name: "Scattered",
     prompt: "When your mind is in a hundred places.",
     color: "#DFEBE1",
@@ -61,6 +65,7 @@ const FEELINGS = [
   },
   {
     id: "reactive",
+    image: "images/feelings/reactive.jpg",
     name: "Reactive",
     prompt: "When you're about to snap, or just did.",
     color: "#F4E0DD",
@@ -75,6 +80,7 @@ const FEELINGS = [
   },
   {
     id: "drained",
+    image: "images/feelings/drained.jpg",
     name: "Drained",
     prompt: "When you have nothing left to give.",
     color: "#F5E7D6",
@@ -89,6 +95,7 @@ const FEELINGS = [
   },
   {
     id: "numb",
+    image: "images/feelings/numb.jpg",
     name: "Numb",
     prompt: "When you can't quite feel anything.",
     color: "#E7E2F0",
@@ -103,6 +110,7 @@ const FEELINGS = [
   },
   {
     id: "doubting-myself",
+    image: "images/feelings/doubting-myself.jpg",
     name: "Doubting Myself",
     prompt: "When the inner critic is loud.",
     color: "#F2EBCF",
