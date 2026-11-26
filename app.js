@@ -65,6 +65,12 @@ const TYPE_SCENE = {
   "Self-compassion": "stones-water", "Warming touch": "stones-water",
   "Journal prompt": "woodland-path", "Reflection": "woodland-path", "Inquiry": "woodland-path"
 };
+// Where the eye rests in each portrait, for the scene window above the controls
+const SCENE_FOCUS = {
+  "water-ripples": "50% 50%", "tree-roots": "50% 62%", "river-stones": "40% 55%",
+  "fern-forest": "45% 55%", "ferns": "45% 55%", "lavender-mountains": "50% 30%",
+  "stones-water": "60% 50%", "woodland-path": "50% 45%", "sunset-shore": "70% 30%"
+};
 const sceneFor = p => p.scene || TYPE_SCENE[p.type] || "sunset-shore";
 
 // The full-screen backdrop (softly blurred) plus a crisp window of the same scene
@@ -423,7 +429,7 @@ async function renderPlayer(feeling, index) {
       </div>
 
       <div class="scene-window">
-        <img class="scene-img" src="images/scenes/${scene}.jpg" alt="" decoding="async">
+        <img class="scene-img" src="images/scenes/${scene}-bg.jpg" alt="" decoding="async" style="object-position:${SCENE_FOCUS[scene] || "50% 50%"}">
         <div class="orb-wrap"><div class="orb" aria-hidden="true"><img src="images/golden-lotus.png" alt="" width="467" height="373"></div></div>
       </div>
 

@@ -562,15 +562,16 @@ a.primary-btn.join-btn { display: block; width: 100%; margin: 0; padding: 12px 2
 /* behind the scene, a deep dusk colour (never plain lavender) */
 body:has(.immersive) { background: #3A2440; }
 .scene-bg {
-  position: fixed; inset: -24px; z-index: -2;
+  position: fixed; inset: 0; z-index: -2;
   background-size: cover; background-position: center;
+  background-color: #3A2440;
   transform: translateZ(0);
 }
 .scene-bg::after {
   content: ""; position: absolute; inset: 0;
   background:
     radial-gradient(120% 60% at 50% 18%, rgba(255, 214, 160, 0.18), rgba(255, 214, 160, 0) 60%),
-    linear-gradient(180deg, rgba(40, 24, 46, 0.35) 0%, rgba(40, 24, 46, 0.15) 35%, rgba(40, 24, 46, 0.55) 100%);
+    linear-gradient(180deg, rgba(40, 24, 46, 0.45) 0%, rgba(40, 24, 46, 0.2) 35%, rgba(40, 24, 46, 0.6) 100%);
 }
 .immersive .back { color: var(--ivory); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5); }
 
