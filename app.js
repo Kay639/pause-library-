@@ -27,12 +27,32 @@ const ICON = {
   rewind:  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><text x="12" y="15.5" font-size="7" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif">15</text></svg>',
   menu:  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   close: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
-  // Line-drawn lotus for the home header
+  // Botanical practice icons (ChatGPT asset pack, 27 Nov 2026), themed bronze/gold via currentColor
+  p_lotus: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 48C12 44 8 30 8 22c12 0 20 7 24 26C36 29 44 22 56 22c0 8-4 22-24 26Z"/><path d="M32 48C18 34 21 18 32 7c11 11 14 27 0 41M10 53q22 6 44 0"/></svg>',
+  p_breath: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 25h35c13 0 13-15 3-15-5 0-8 3-8 7M7 34h47M7 43h30c12 0 12 14 2 14-5 0-8-3-8-7"/></svg>',
+  p_leaf: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 50C5 22 27 10 54 9c0 28-12 48-39 42M10 56 43 21M24 42l-1-14M34 32l13 1"/></svg>',
+  p_moon: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M43 8A25 25 0 1 0 55 47 25 25 0 0 1 43 8Z"/><path d="M51 10v12m-6-6h12"/></svg>',
+  p_heart: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 54 10 33C-3 18 17 4 32 21 47 4 67 18 54 33Z"/></svg>',
+  p_journal: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 17Q19 7 6 12v38q13-5 26 5 13-10 26-5V12q-13-5-26 5v38M12 23q8-2 14 3m-14 8q8-2 14 3m12-11q6-5 14-3m-14 14q6-5 14-3"/></svg>',
+  // Line-drawn lotus (fallback only; the home header uses images/golden-lotus.png)
   lotus: '<svg viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M60 6c-9 10-13 21-13 31s4 20 13 28c9-8 13-18 13-28S69 16 60 6z"/><path d="M60 65c-6-10-17-21-31-24 2 13 14 23 31 24z"/><path d="M60 65c6-10 17-21 31-24-2 13-14 23-31 24z"/><path d="M47 40C37 30 24 26 11 27c5 16 25 33 49 38"/><path d="M73 40c10-10 23-14 36-13-5 16-25 33-49 38"/><path d="M8 68c18 2 36 2 52-3 16 5 34 5 52 3"/></svg>',
   // Gold brush-stroke underline
   swash: '<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 9C50 3 130 1 198 4c-60 2-130 5-196 5z" fill="currentColor"/></svg>',
   forward: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/><text x="12" y="15.5" font-size="7" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif">15</text></svg>'
 };
+
+// Which botanical icon goes with each practice type (Practice_Icon_Guide.txt):
+// Lotus = pause/visualisation, Breath = breathwork, Leaf = grounding/reset,
+// Moon = rest, Heart = self-compassion, Journal = journaling/reflection.
+const TYPE_ICON = {
+  "Breathwork": "breath",
+  "Grounding": "leaf", "Body scan": "leaf", "Movement": "leaf", "Reconnection": "leaf",
+  "Guided rest": "moon", "Evening release": "moon",
+  "Self-compassion": "heart", "Warming touch": "heart", "Affirmation": "heart",
+  "Journal prompt": "journal", "Reflection": "journal", "Inquiry": "journal",
+  "Visualization": "lotus", "Focus": "lotus", "Listening": "lotus", "Intuition check-in": "lotus", "Mindful drink": "lotus"
+};
+const practiceIcon = type => ICON["p_" + (TYPE_ICON[type] || "lotus")];
 
 /* ---------- Members (Supabase sign-in) ---------- */
 
@@ -277,8 +297,9 @@ function findFeeling(id) {
 // Apply a feeling's soft colour to the page
 function setColors(feeling) {
   const root = document.documentElement.style;
-  root.setProperty("--tint", feeling ? feeling.color : "#EFEAE2");
-  root.setProperty("--accent", feeling ? feeling.accent : "#6F6862");
+  // One warm palette across the app (Inner Style Board): lavender, peach, plum, gold
+  root.setProperty("--tint", "#F3E4EC");
+  root.setProperty("--accent", "#6B4A70");
 }
 
 // 125 seconds → "2:05"
@@ -309,8 +330,9 @@ function renderHome() {
   app.innerHTML = `
     <section class="screen home">
       <header class="hero">
+        <img class="hero-bg" src="images/sunset-header.jpg" alt="" decoding="async" fetchpriority="high">
         ${homeMenu()}
-        <div class="lotus">${ICON.lotus}</div>
+        <img class="lotus" src="images/golden-lotus.png" alt="" width="467" height="373">
         <h1 class="hero-title"><span>The</span> Pause Library</h1>
         <div class="hero-swash">${ICON.swash}</div>
         <p class="hero-tagline">30 short practices<br>for real life</p>
@@ -328,27 +350,36 @@ function renderList(feeling) {
   setColors(feeling);
   document.title = feeling.name + " · The Pause Library";
 
-  const items = feeling.practices.map((p, i) => `
+  const items = feeling.practices.map((p, i) => {
+    const open = canPlay(i);
+    const tag = isFree(i) ? '<span class="tag tag-free">Free sample</span>' : (session ? "" : '<span class="tag tag-members">Members</span>');
+    const label = `${p.title}, ${p.type}, ${minLabel(p.minutes)}${isFree(i) ? ", free sample" : ""}${open ? "" : ", members only"}`;
+    return `
     <li>
-      <a class="practice${canPlay(i) ? "" : " locked"}" href="#/play/${feeling.id}/${i}">
-        <span class="practice-dot">${canPlay(i) ? ICON.small : ICON.lock}</span>
+      <a class="practice${open ? "" : " locked"}" href="#/play/${feeling.id}/${i}" aria-label="${escapeHtml(label)}">
+        <span class="practice-icon">${practiceIcon(p.type)}</span>
         <span class="practice-text">
-          ${isFree(i) ? '<span class="tag">Free sample</span>' : (session ? "" : '<span class="tag tag-members">Members</span>')}
+          ${tag}
           <span class="practice-title" style="display:block">${p.title}</span>
           <span class="practice-meta">${p.type} · ${minLabel(p.minutes)}</span>
         </span>
+        <span class="practice-action" aria-hidden="true">${open ? ICON.small : ICON.lock}</span>
       </a>
-    </li>`).join("");
+    </li>`;
+  }).join("");
 
+  const banner = feeling.inner || feeling.image;
   app.innerHTML = `
     <section class="screen">
       <a class="back" href="#/">${ICON.back} All feelings</a>
-      <header class="list-header${feeling.image ? " has-image" : ""}">
-        ${feeling.image ? `<img class="list-header-img" src="${feeling.image}" alt="">` : ""}
+      <header class="list-header${banner ? " has-image" : ""}">
+        ${banner ? `<img class="list-header-img" src="${banner}" alt="">` : ""}
         <h1>${feeling.name}</h1>
+        <div class="list-swash">${ICON.swash}</div>
         <p>${feeling.prompt}</p>
       </header>
       <ul class="practices">${items}</ul>
+      <img class="page-lotus" src="images/golden-lotus.png" alt="" width="467" height="373" loading="lazy">
     </section>`;
 }
 
@@ -581,7 +612,7 @@ function route() {
   const parts = location.hash.replace(/^#\/?/, "").split("/");
   const feeling = findFeeling(parts[1]);
   const isHome = !(parts[0] === "signin" || (parts[0] === "feeling" && feeling) || (parts[0] === "play" && feeling && feeling.practices[Number(parts[2])]));
-  document.body.classList.toggle("is-home", isHome);
+  if (document.body) document.body.classList.toggle("is-home", isHome);
 
   if (parts[0] === "signin") {
     renderSignIn();
