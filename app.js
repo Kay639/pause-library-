@@ -25,6 +25,12 @@ const ICON = {
   lock:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   small: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
   rewind:  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><text x="12" y="15.5" font-size="7" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif">15</text></svg>',
+  menu:  '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  close: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  // Line-drawn lotus for the home header
+  lotus: '<svg viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M60 6c-9 10-13 21-13 31s4 20 13 28c9-8 13-18 13-28S69 16 60 6z"/><path d="M60 65c-6-10-17-21-31-24 2 13 14 23 31 24z"/><path d="M60 65c6-10 17-21 31-24-2 13-14 23-31 24z"/><path d="M47 40C37 30 24 26 11 27c5 16 25 33 49 38"/><path d="M73 40c10-10 23-14 36-13-5 16-25 33-49 38"/><path d="M8 68c18 2 36 2 52-3 16 5 34 5 52 3"/></svg>',
+  // Gold brush-stroke underline
+  swash: '<svg viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 9C50 3 130 1 198 4c-60 2-130 5-196 5z" fill="currentColor"/></svg>',
   forward: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/><text x="12" y="15.5" font-size="7" text-anchor="middle" fill="currentColor" stroke="none" font-family="sans-serif">15</text></svg>'
 };
 
@@ -114,6 +120,35 @@ function accountBar() {
     return `<div class="account">Signed in as <strong>${escapeHtml(session.user.email || "member")}</strong> · <button class="link-btn sign-out">Sign out</button></div>`;
   }
   return `<div class="account">Member? <a class="link-btn" href="#/signin">Sign in</a></div>`;
+}
+
+// The menu behind the ☰ button on Home: sign in / out and manage membership
+function homeMenu() {
+  const manage = (typeof MEMBERSHIP !== "undefined" && MEMBERSHIP.manageUrl)
+    ? `<a class="menu-link" href="${escapeHtml(MEMBERSHIP.manageUrl)}" target="_blank" rel="noopener">Manage membership</a>` : "";
+  let account = "";
+  if (sb && session) {
+    account = `<p class="menu-who">Signed in as <strong>${escapeHtml(session.user.email || "member")}</strong></p>
+      <button class="menu-link sign-out">Sign out</button>`;
+  } else if (sb) {
+    account = `<a class="menu-link" href="#/signin">Member sign-in</a>`;
+  }
+  return `
+    <button class="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="home-menu">${ICON.menu}</button>
+    <nav class="menu-panel" id="home-menu" hidden>
+      <button class="menu-close" aria-label="Close menu">${ICON.close}</button>
+      ${account}${manage}
+    </nav>`;
+}
+
+function wireHomeMenu() {
+  const btn = app.querySelector(".menu-btn");
+  const panel = app.querySelector(".menu-panel");
+  if (!btn || !panel) return;
+  const setOpen = open => { panel.hidden = !open; btn.setAttribute("aria-expanded", String(open)); };
+  btn.addEventListener("click", () => setOpen(panel.hidden));
+  app.querySelector(".menu-close").addEventListener("click", () => { setOpen(false); btn.focus(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") setOpen(false); }, { once: true });
 }
 
 // Join buttons (monthly and yearly) and the "manage membership" link.
@@ -265,20 +300,25 @@ function renderHome() {
   const tiles = FEELINGS.map(f => `
     <li>
       <a class="feeling" href="#/feeling/${f.id}" style="--tint:${f.color};--accent:${f.accent}">
+        ${f.image ? `<img class="feeling-img" src="${f.image}" alt="" loading="lazy" decoding="async">` : ""}
         <span class="feeling-name">${f.name}</span>
+        <span class="feeling-swash">${ICON.swash}</span>
       </a>
     </li>`).join("");
 
   app.innerHTML = `
-    <section class="screen">
-      ${accountBar()}
-      <header class="home-header">
-        <div class="brand">The Pause Library</div>
-        <h1>How are you feeling right now?</h1>
-        <p>Choose one. There's no wrong answer.</p>
+    <section class="screen home">
+      <header class="hero">
+        ${homeMenu()}
+        <div class="lotus">${ICON.lotus}</div>
+        <h1 class="hero-title"><span>The</span> Pause Library</h1>
+        <div class="hero-swash">${ICON.swash}</div>
+        <p class="hero-tagline">30 short practices<br>for real life</p>
       </header>
+      <h2 class="visually-hidden">How are you feeling right now? Choose one.</h2>
       <ul class="feelings">${tiles}</ul>
     </section>`;
+  wireHomeMenu();
   wireAccountBar();
 }
 
@@ -303,7 +343,8 @@ function renderList(feeling) {
   app.innerHTML = `
     <section class="screen">
       <a class="back" href="#/">${ICON.back} All feelings</a>
-      <header class="list-header">
+      <header class="list-header${feeling.image ? " has-image" : ""}">
+        ${feeling.image ? `<img class="list-header-img" src="${feeling.image}" alt="">` : ""}
         <h1>${feeling.name}</h1>
         <p>${feeling.prompt}</p>
       </header>
@@ -539,6 +580,8 @@ function route() {
 
   const parts = location.hash.replace(/^#\/?/, "").split("/");
   const feeling = findFeeling(parts[1]);
+  const isHome = !(parts[0] === "signin" || (parts[0] === "feeling" && feeling) || (parts[0] === "play" && feeling && feeling.practices[Number(parts[2])]));
+  document.body.classList.toggle("is-home", isHome);
 
   if (parts[0] === "signin") {
     renderSignIn();
